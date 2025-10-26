@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "npm-ai-hooks": "file:../.."
+    "npm-ai-hooks": "^2.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

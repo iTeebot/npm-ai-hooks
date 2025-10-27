@@ -4,7 +4,7 @@
 
 Inject LLM-like behavior into any JavaScript or TypeScript function with a single line, without writing prompts, handling SDKs, or locking into any provider. Works seamlessly in both Node.js (Express) and React (Vite) environments.
 
-📚 **[View Homepage & Demos](./website/)** | 🎮 **[React Example](./examples/react/)** | 💻 **[Node.js Example](./examples/demo.ts)**
+📚 **[View Homepage & Demos](https://labs.iteebot.com/npm-packages/npm-ai-hooks)** | 🎮 **[React Example](https://labs.iteebot.com/npm-packages/npm-ai-hooks/demo)** | 💻 **[Node.js Example](./examples/demo.ts)**
 
 ---
 
@@ -330,7 +330,7 @@ interface MultimodalInput {
 **See full examples:**
 - [Vision Examples](./examples/multimodal/vision-example.ts)
 - [Voice Examples](./examples/multimodal/voice-example.ts)
-- [React Demo with UI](./examples/react/)
+- [React Demo with UI](https://labs.iteebot.com/npm-packages/npm-ai-hooks/demo)
 
 ### 5. Error Handling
 
@@ -608,5 +608,5 @@ MIT © 2025 `npm-ai-hooks` Team
 
 - [GitHub Repository](https://github.com/iTeebot/npm-ai-hooks)
 - [NPM Package](https://www.npmjs.com/package/npm-ai-hooks)
-- [Documentation](https://github.com/iTeebot/npm-ai-hooks#readme)
+- [Documentation](https://labs.iteebot.com/npm-packages/npm-ai-hooks)
 - [Changelog](CHANGELOG.md)

@@ -114,7 +114,7 @@ This is a major release that completely refactors the provider system for better
 #### Old Way (v1.x)
 ```typescript
 // Set environment variables
-process.env.AI_HOOK_OPENAI_KEY = 'sk-...';
+process.env.OPENAI_KEY = 'sk-...';
 
 // Use providers
 import { getProvider } from 'npm-ai-hooks';

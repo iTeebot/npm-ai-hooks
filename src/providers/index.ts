@@ -95,7 +95,7 @@ export function getProvider(name?: Provider): { fn: ProviderFunction<any>; provi
   // 3. No valid keys found → throw error (single instruction, no fallback)
   throw new AIHookError(
     "NO_PROVIDER_FOUND",
-    "No valid AI provider API key was found.\n\nAt least one provider API key is required in your .env file.\n\nPlease add one of the following to your .env (see .env.example for details):\n  - AI_HOOK_OPENAI_KEY\n  - AI_HOOK_OPENROUTER_KEY\n  - AI_HOOK_GROQ_KEY\n",
+    "No valid AI provider API key was found.\n\nAt least one provider API key is required in your .env file.\n\nPlease add one of the following to your .env (see .env.example for details):\n  - OPENAI_KEY\n  - OPENROUTER_KEY\n  - GROQ_KEY\n",
     undefined,
     "Reference .env.example for setup instructions."
   );

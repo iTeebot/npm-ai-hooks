@@ -30,7 +30,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   openai: {
     name: "openai",
     baseUrl: "https://api.openai.com/v1/chat/completions",
-    envKey: "AI_HOOK_OPENAI_KEY",
+    envKey: "OPENAI_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
     responseParser: responseParsers.openaiStyle,
@@ -48,7 +48,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   groq: {
     name: "groq",
     baseUrl: "https://api.groq.com/openai/v1/chat/completions",
-    envKey: "AI_HOOK_GROQ_KEY",
+    envKey: "GROQ_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
     responseParser: responseParsers.openaiStyle,
@@ -66,7 +66,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   claude: {
     name: "claude",
     baseUrl: "https://api.anthropic.com/v1/messages",
-    envKey: "AI_HOOK_CLAUDE_KEY",
+    envKey: "CLAUDE_KEY",
     headers: { 
       "Content-Type": "application/json",
       "anthropic-version": "2023-06-01"
@@ -87,7 +87,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   gemini: {
     name: "gemini",
     baseUrl: "https://generativelanguage.googleapis.com/v1beta/models",
-    envKey: "AI_HOOK_GEMINI_KEY",
+    envKey: "GEMINI_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.geminiStyle,
     responseParser: responseParsers.geminiStyle,
@@ -105,7 +105,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   deepseek: {
     name: "deepseek",
     baseUrl: "https://api.deepseek.com/v1/chat/completions",
-    envKey: "AI_HOOK_DEEPSEEK_KEY",
+    envKey: "DEEPSEEK_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
     responseParser: responseParsers.openaiStyle,
@@ -123,7 +123,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   mistral: {
     name: "mistral",
     baseUrl: "https://api.mistral.ai/v1/chat/completions",
-    envKey: "AI_HOOK_MISTRAL_KEY",
+    envKey: "MISTRAL_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
     responseParser: responseParsers.openaiStyle,
@@ -141,7 +141,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   xai: {
     name: "xai",
     baseUrl: "https://api.x.ai/v1/chat/completions",
-    envKey: "AI_HOOK_XAI_KEY",
+    envKey: "XAI_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
     responseParser: responseParsers.openaiStyle,
@@ -159,7 +159,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   perplexity: {
     name: "perplexity",
     baseUrl: "https://api.perplexity.ai/chat/completions",
-    envKey: "AI_HOOK_PERPLEXITY_KEY",
+    envKey: "PERPLEXITY_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
     responseParser: responseParsers.openaiStyle,
@@ -177,7 +177,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
   openrouter: {
     name: "openrouter",
     baseUrl: "https://openrouter.ai/api/v1/chat/completions",
-    envKey: "AI_HOOK_OPENROUTER_KEY",
+    envKey: "OPENROUTER_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
     responseParser: responseParsers.openaiStyle,

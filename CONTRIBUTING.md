@@ -57,7 +57,7 @@ Implement the required interface:
 
 export const mistralProvider: Provider = {
   name: "mistral",
-  isAvailable: () => !!process.env.AI_HOOK_MISTRAL_KEY,
+  isAvailable: () => !!process.env.MISTRAL_KEY,
   generate: async (prompt, options) => { /* API call logic */ },
   models: ["mistral-medium", "mistral-large"]
 };

@@ -19,74 +19,74 @@ async function testAllProviders() {
   const providers: Array<{ provider: string; key: string; defaultModel: string }> = [];
   
   // Check for API keys in various environment variable formats
-  if (process.env.OPENAI_KEY || process.env.OPENAI_API_KEY || process.env.AI_HOOK_OPENAI_KEY) {
+  if (process.env.OPENAI_KEY || process.env.OPENAI_API_KEY || process.env.OPENAI_KEY) {
     providers.push({ 
       provider: 'openai', 
-      key: process.env.OPENAI_KEY || process.env.OPENAI_API_KEY || process.env.AI_HOOK_OPENAI_KEY || '',
+      key: process.env.OPENAI_KEY || process.env.OPENAI_API_KEY || process.env.OPENAI_KEY || '',
       defaultModel: 'gpt-4o'
     });
   }
   
-  if (process.env.CLAUDE_KEY || process.env.CLAUDE_API_KEY || process.env.AI_HOOK_CLAUDE_KEY) {
+  if (process.env.CLAUDE_KEY || process.env.CLAUDE_API_KEY || process.env.CLAUDE_KEY) {
     providers.push({ 
       provider: 'claude', 
-      key: process.env.CLAUDE_KEY || process.env.CLAUDE_API_KEY || process.env.AI_HOOK_CLAUDE_KEY || '',
+      key: process.env.CLAUDE_KEY || process.env.CLAUDE_API_KEY || process.env.CLAUDE_KEY || '',
       defaultModel: 'claude-3-5-sonnet-20241022'
     });
   }
   
-  if (process.env.GEMINI_KEY || process.env.GEMINI_API_KEY || process.env.AI_HOOK_GEMINI_KEY) {
+  if (process.env.GEMINI_KEY || process.env.GEMINI_API_KEY || process.env.GEMINI_KEY) {
     providers.push({ 
       provider: 'gemini', 
-      key: process.env.GEMINI_KEY || process.env.GEMINI_API_KEY || process.env.AI_HOOK_GEMINI_KEY || '',
+      key: process.env.GEMINI_KEY || process.env.GEMINI_API_KEY || process.env.GEMINI_KEY || '',
       defaultModel: 'gemini-1.5-flash'
     });
   }
   
-  if (process.env.GROQ_KEY || process.env.GROQ_API_KEY || process.env.AI_HOOK_GROQ_KEY) {
+  if (process.env.GROQ_KEY || process.env.GROQ_API_KEY || process.env.GROQ_KEY) {
     providers.push({ 
       provider: 'groq', 
-      key: process.env.GROQ_KEY || process.env.GROQ_API_KEY || process.env.AI_HOOK_GROQ_KEY || '',
+      key: process.env.GROQ_KEY || process.env.GROQ_API_KEY || process.env.GROQ_KEY || '',
       defaultModel: 'llama-3.1-70b-versatile'
     });
   }
   
-  if (process.env.OPENROUTER_KEY || process.env.OPENROUTER_API_KEY || process.env.AI_HOOK_OPENROUTER_KEY) {
+  if (process.env.OPENROUTER_KEY || process.env.OPENROUTER_API_KEY || process.env.OPENROUTER_KEY) {
     providers.push({ 
       provider: 'openrouter', 
-      key: process.env.OPENROUTER_KEY || process.env.OPENROUTER_API_KEY || process.env.AI_HOOK_OPENROUTER_KEY || '',
+      key: process.env.OPENROUTER_KEY || process.env.OPENROUTER_API_KEY || process.env.OPENROUTER_KEY || '',
       defaultModel: 'openai/gpt-4o-mini'
     });
   }
   
-  if (process.env.DEEPSEEK_KEY || process.env.DEEPSEEK_API_KEY || process.env.AI_HOOK_DEEPSEEK_KEY) {
+  if (process.env.DEEPSEEK_KEY || process.env.DEEPSEEK_API_KEY || process.env.DEEPSEEK_KEY) {
     providers.push({ 
       provider: 'deepseek', 
-      key: process.env.DEEPSEEK_KEY || process.env.DEEPSEEK_API_KEY || process.env.AI_HOOK_DEEPSEEK_KEY || '',
+      key: process.env.DEEPSEEK_KEY || process.env.DEEPSEEK_API_KEY || process.env.DEEPSEEK_KEY || '',
       defaultModel: 'deepseek-chat'
     });
   }
   
-  if (process.env.XAI_KEY || process.env.XAI_API_KEY || process.env.AI_HOOK_XAI_KEY) {
+  if (process.env.XAI_KEY || process.env.XAI_API_KEY || process.env.XAI_KEY) {
     providers.push({ 
       provider: 'xai', 
-      key: process.env.XAI_KEY || process.env.XAI_API_KEY || process.env.AI_HOOK_XAI_KEY || '',
+      key: process.env.XAI_KEY || process.env.XAI_API_KEY || process.env.XAI_KEY || '',
       defaultModel: 'grok-2-1212'
     });
   }
   
-  if (process.env.PERPLEXITY_KEY || process.env.PERPLEXITY_API_KEY || process.env.AI_HOOK_PERPLEXITY_KEY) {
+  if (process.env.PERPLEXITY_KEY || process.env.PERPLEXITY_API_KEY || process.env.PERPLEXITY_KEY) {
     providers.push({ 
       provider: 'perplexity', 
-      key: process.env.PERPLEXITY_KEY || process.env.PERPLEXITY_API_KEY || process.env.AI_HOOK_PERPLEXITY_KEY || '',
+      key: process.env.PERPLEXITY_KEY || process.env.PERPLEXITY_API_KEY || process.env.PERPLEXITY_KEY || '',
       defaultModel: 'sonar'
     });
   }
   
-  if (process.env.MISTRAL_KEY || process.env.MISTRAL_API_KEY || process.env.AI_HOOK_MISTRAL_KEY) {
+  if (process.env.MISTRAL_KEY || process.env.MISTRAL_API_KEY || process.env.MISTRAL_KEY) {
     providers.push({ 
       provider: 'mistral', 
-      key: process.env.MISTRAL_KEY || process.env.MISTRAL_API_KEY || process.env.AI_HOOK_MISTRAL_KEY || '',
+      key: process.env.MISTRAL_KEY || process.env.MISTRAL_API_KEY || process.env.MISTRAL_KEY || '',
       defaultModel: 'mistral-large-latest'
     });
   }
@@ -101,7 +101,7 @@ async function testAllProviders() {
   if (providers.length === 0) {
     console.log('❌ No API keys found in environment variables');
     console.log('Please set up your .env file with API keys');
-    console.log('Expected variables: AI_HOOK_OPENAI_KEY, AI_HOOK_CLAUDE_KEY, etc.');
+    console.log('Expected variables: OPENAI_KEY, CLAUDE_KEY, etc.');
     return;
   }
 
@@ -189,10 +189,10 @@ async function testAllProviders() {
   console.log('\n🔄 Testing Dynamic Provider Management...');
   
   // Test adding a provider dynamically (if we have a key for it)
-  if (process.env.AI_HOOK_MISTRAL_KEY && !providers.some(p => p.provider === 'mistral')) {
+  if (process.env.MISTRAL_KEY && !providers.some(p => p.provider === 'mistral')) {
     addProvider({
       provider: 'mistral',
-      key: process.env.AI_HOOK_MISTRAL_KEY,
+      key: process.env.MISTRAL_KEY,
       defaultModel: 'mistral-large-latest'
     });
     console.log('Added Mistral provider dynamically');

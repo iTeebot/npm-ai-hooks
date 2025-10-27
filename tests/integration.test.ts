@@ -9,23 +9,23 @@ describe("Integration Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     // Reset environment variables
-    delete process.env.AI_HOOK_OPENAI_KEY;
-    delete process.env.AI_HOOK_CLAUDE_KEY;
-    delete process.env.AI_HOOK_GEMINI_KEY;
-    delete process.env.AI_HOOK_DEEPSEEK_KEY;
-    delete process.env.AI_HOOK_GROQ_KEY;
-    delete process.env.AI_HOOK_OPENROUTER_KEY;
-    delete process.env.AI_HOOK_XAI_KEY;
-    delete process.env.AI_HOOK_PERPLEXITY_KEY;
-    delete process.env.AI_HOOK_MISTRAL_KEY;
-    delete process.env.AI_HOOK_DEFAULT_PROVIDER;
+    delete process.env.OPENAI_KEY;
+    delete process.env.CLAUDE_KEY;
+    delete process.env.GEMINI_KEY;
+    delete process.env.DEEPSEEK_KEY;
+    delete process.env.GROQ_KEY;
+    delete process.env.OPENROUTER_KEY;
+    delete process.env.XAI_KEY;
+    delete process.env.PERPLEXITY_KEY;
+    delete process.env.MISTRAL_KEY;
+    delete process.env.DEFAULT_PROVIDER;
   });
 
   describe("Provider Fallback Chain", () => {
     test("should fallback through multiple providers on failure", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-invalid-key";
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-invalid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
+      process.env.OPENAI_KEY = "sk-invalid-key";
+      process.env.CLAUDE_KEY = "sk-invalid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
       
       // Mock OpenAI and Claude failures, Groq success
       mockFetch
@@ -57,9 +57,9 @@ describe("Integration Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should prefer OpenRouter when available", async () => {
-      process.env.AI_HOOK_OPENROUTER_KEY = "sk-or-valid-key";
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
+      process.env.OPENROUTER_KEY = "sk-or-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -78,9 +78,9 @@ describe("Integration Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should use default provider when specified", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
-      process.env.AI_HOOK_DEFAULT_PROVIDER = "groq";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
+      process.env.DEFAULT_PROVIDER = "groq";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -101,9 +101,9 @@ describe("Integration Tests", () => {
 
   describe("Multi-Provider Workflows", () => {
     test("should use different providers for different tasks", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.CLAUDE_KEY = "sk-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -139,8 +139,8 @@ describe("Integration Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle pipeline with different providers", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.CLAUDE_KEY = "sk-valid-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -171,11 +171,11 @@ describe("Integration Tests", () => {
 
   describe("Provider Availability Detection", () => {
     test("should detect all available providers", () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GEMINI_KEY = "AIza-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
-      process.env.AI_HOOK_OPENROUTER_KEY = "sk-or-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.CLAUDE_KEY = "sk-valid-key";
+      process.env.GEMINI_KEY = "AIza-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
+      process.env.OPENROUTER_KEY = "sk-or-valid-key";
       
       const providers = getAvailableProviders();
       
@@ -188,8 +188,8 @@ describe("Integration Tests", () => {
     });
 
     test("should handle partial provider availability", () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
       
       const providers = getAvailableProviders();
       
@@ -206,7 +206,7 @@ describe("Integration Tests", () => {
 
   describe("Concurrent Operations", () => {
     test("should handle multiple concurrent requests", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -232,8 +232,8 @@ describe("Integration Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle mixed success and failure scenarios", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
       
       // Mock mixed responses
       mockFetch
@@ -284,7 +284,7 @@ describe("Integration Tests", () => {
 
   describe("Model Selection", () => {
     test("should use default model when none specified", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -306,7 +306,7 @@ describe("Integration Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should use specified model when provided", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -331,8 +331,8 @@ describe("Integration Tests", () => {
 
   describe("Caching Integration", () => {
     test("should handle caching across different providers", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -365,7 +365,7 @@ describe("Integration Tests", () => {
 
   describe("Error Recovery", () => {
     test("should recover from temporary failures", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
       
       // Mock temporary failure followed by success
       mockFetch

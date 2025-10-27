@@ -317,9 +317,9 @@ describe("Task Tests", () => {
 
   describe("Task with Different Providers", () => {
     beforeEach(() => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-test-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
+      process.env.CLAUDE_KEY = "sk-test-key";
+      process.env.GROQ_KEY = "gr-test-key";
     });
 
     test("should work with OpenAI for summarize", async () => {

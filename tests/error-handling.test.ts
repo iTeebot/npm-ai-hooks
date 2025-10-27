@@ -10,15 +10,15 @@ describe("Error Handling Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     // Reset environment variables
-    delete process.env.AI_HOOK_OPENAI_KEY;
-    delete process.env.AI_HOOK_CLAUDE_KEY;
-    delete process.env.AI_HOOK_GEMINI_KEY;
-    delete process.env.AI_HOOK_DEEPSEEK_KEY;
-    delete process.env.AI_HOOK_GROQ_KEY;
-    delete process.env.AI_HOOK_OPENROUTER_KEY;
-    delete process.env.AI_HOOK_XAI_KEY;
-    delete process.env.AI_HOOK_PERPLEXITY_KEY;
-    delete process.env.AI_HOOK_MISTRAL_KEY;
+    delete process.env.OPENAI_KEY;
+    delete process.env.CLAUDE_KEY;
+    delete process.env.GEMINI_KEY;
+    delete process.env.DEEPSEEK_KEY;
+    delete process.env.GROQ_KEY;
+    delete process.env.OPENROUTER_KEY;
+    delete process.env.XAI_KEY;
+    delete process.env.PERPLEXITY_KEY;
+    delete process.env.MISTRAL_KEY;
   });
 
   describe("No Provider Available", () => {
@@ -28,8 +28,8 @@ describe("Error Handling Tests", () => {
     });
 
     test("should throw error when all API keys are invalid", () => {
-      process.env.AI_HOOK_OPENAI_KEY = "invalid-key";
-      process.env.AI_HOOK_CLAUDE_KEY = "invalid-key";
+      process.env.OPENAI_KEY = "invalid-key";
+      process.env.CLAUDE_KEY = "invalid-key";
       
       // Mock API error responses
       mockFetch.mockResolvedValue({
@@ -46,7 +46,7 @@ describe("Error Handling Tests", () => {
 
   describe("API Key Errors", () => {
     test("should handle invalid OpenAI API key", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-invalid-key";
+      process.env.OPENAI_KEY = "sk-invalid-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -68,7 +68,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle invalid Claude API key", async () => {
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-invalid-key";
+      process.env.CLAUDE_KEY = "sk-invalid-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -90,7 +90,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle invalid Gemini API key", async () => {
-      process.env.AI_HOOK_GEMINI_KEY = "AIza-invalid-key";
+      process.env.GEMINI_KEY = "AIza-invalid-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -114,7 +114,7 @@ describe("Error Handling Tests", () => {
 
   describe("Rate Limiting", () => {
     test("should handle rate limit exceeded", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -139,7 +139,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle quota exceeded", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -163,7 +163,7 @@ describe("Error Handling Tests", () => {
 
   describe("Model Errors", () => {
     test("should handle model not found", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -186,7 +186,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle model not allowed", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -211,7 +211,7 @@ describe("Error Handling Tests", () => {
 
   describe("Network Errors", () => {
     test("should handle network timeout", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockRejectedValue(new Error("Request timeout"));
       
@@ -224,7 +224,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle connection refused", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockRejectedValue(new Error("Connection refused"));
       
@@ -237,7 +237,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle DNS resolution failure", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockRejectedValue(new Error("getaddrinfo ENOTFOUND"));
       
@@ -252,7 +252,7 @@ describe("Error Handling Tests", () => {
 
   describe("Server Errors", () => {
     test("should handle 500 internal server error", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -274,7 +274,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle 502 bad gateway", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -296,7 +296,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle 503 service unavailable", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -320,7 +320,7 @@ describe("Error Handling Tests", () => {
 
   describe("Malformed Responses", () => {
     test("should handle malformed JSON response", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -352,7 +352,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle empty response", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -369,7 +369,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle response without choices", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -390,7 +390,7 @@ describe("Error Handling Tests", () => {
 
   describe("Input Validation", () => {
     test("should handle null input", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -407,7 +407,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle undefined input", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -424,7 +424,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle non-string input", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: true,
@@ -443,7 +443,7 @@ describe("Error Handling Tests", () => {
 
   describe("Provider-Specific Errors", () => {
     test("should handle OpenAI specific errors", async () => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-test-key";
+      process.env.OPENAI_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,
@@ -466,7 +466,7 @@ describe("Error Handling Tests", () => {
     }, TEST_TIMEOUT);
 
     test("should handle Claude specific errors", async () => {
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-test-key";
+      process.env.CLAUDE_KEY = "sk-test-key";
       
       mockFetch.mockResolvedValue({
         ok: false,

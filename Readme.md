@@ -4,12 +4,15 @@
 
 Inject LLM-like behavior into any JavaScript or TypeScript function with a single line, without writing prompts, handling SDKs, or locking into any provider. Works seamlessly in both Node.js (Express) and React (Vite) environments.
 
+📚 **[View Homepage & Demos](./website/)** | 🎮 **[React Example](./examples/react/)** | 💻 **[Node.js Example](./examples/demo.ts)**
+
 ---
 
 ## Features
 
 * **Universal API:** Works with OpenAI, Claude, Gemini, DeepSeek, Groq, OpenRouter, XAI, Perplexity, and Mistral — out of the box.
 * **Cross-Platform:** Works in both Node.js (Express) and React (Vite) environments with dual build system.
+* **Multimodal Support:** 🆕 Images, files, and voice input support with vision-enabled models.
 * **Plug & Play:** Wrap any function and instantly give it AI-powered behavior.
 * **Zero Prompting:** Built-in task templates (summarize, explain, translate, sentiment, rewrite, code-review, etc.)
 * **Explicit Configuration:** No environment variables needed - initialize providers explicitly with API keys.
@@ -20,7 +23,7 @@ Inject LLM-like behavior into any JavaScript or TypeScript function with a singl
 * **Cost Awareness:** Estimate and log token usage and cost before and after calls.
 * **Caching:** Prevents duplicate calls and charges by caching results intelligently.
 * **Extensible:** Add your own providers and custom tasks easily.
-* **Debug Friendly:** Full debug logging with `AI_HOOK_DEBUG=true`.
+* **Debug Friendly:** Full debug logging with `DEBUG=true`.
 
 ---
 
@@ -230,7 +233,106 @@ const result = await translate(await summarize("Long technical article..."));
 console.log(result); // Résumé en français
 ```
 
-### 4. Error Handling
+### 4. Multimodal Support (Images, Files, Voice) 🎨🎤
+
+**NEW!** npm-ai-hooks now supports multimodal inputs including images, files, and voice.
+
+```typescript
+import { wrap, MultimodalInput } from "npm-ai-hooks";
+import * as fs from 'fs';
+
+// Image Analysis
+const analyzeImage = wrap((input: MultimodalInput) => input, {
+  provider: 'openai',
+  model: 'gpt-4o', // Vision-enabled model
+  customPrompt: 'Describe what you see in this image'
+});
+
+// Load and encode image
+const imageBuffer = fs.readFileSync('./photo.jpg');
+const base64Image = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`;
+
+const result = await analyzeImage({
+  text: 'What is in this image?',
+  image: base64Image
+});
+console.log(result.output); // Detailed image description
+
+// OCR (Text Extraction)
+const extractText = wrap((input: MultimodalInput) => input, {
+  provider: 'openai',
+  model: 'gpt-4o',
+  customPrompt: 'Extract all text from this image'
+});
+
+const ocrResult = await extractText({
+  text: 'Extract text from this document',
+  image: base64Image
+});
+
+// File Processing
+const analyzeFile = wrap((input: MultimodalInput) => input, {
+  provider: 'claude',
+  model: 'claude-3-opus',
+  task: 'summarize'
+});
+
+const fileBuffer = fs.readFileSync('./document.pdf');
+const fileResult = await analyzeFile({
+  text: 'Summarize this document',
+  file: {
+    name: 'document.pdf',
+    data: `data:application/pdf;base64,${fileBuffer.toString('base64')}`,
+    type: 'application/pdf'
+  }
+});
+```
+
+**Browser Voice Input (Web Speech API):**
+```typescript
+// In browser environment
+const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+const recognition = new SpeechRecognition();
+
+recognition.onresult = async (event) => {
+  const transcript = event.results[0][0].transcript;
+  
+  // Process voice input with AI
+  const explain = wrap((text: string) => text, { task: 'explain' });
+  const result = await explain(transcript);
+  console.log(result.output);
+};
+
+recognition.start();
+```
+
+**Multimodal Interface:**
+```typescript
+interface MultimodalInput {
+  text?: string;           // Text content
+  image?: string;          // Base64 encoded image (with data URI)
+  file?: {                 // File attachment
+    name: string;          // File name
+    data: string;          // Base64 encoded (with data URI)
+    type: string;          // MIME type
+  };
+}
+```
+
+**Use Cases:**
+- 📸 Image analysis and description
+- 📄 OCR and document processing
+- 🔍 Code review from screenshots
+- 🎤 Voice commands and transcription
+- 📊 Chart and diagram analysis
+- 🏷️ Product image tagging
+
+**See full examples:**
+- [Vision Examples](./examples/multimodal/vision-example.ts)
+- [Voice Examples](./examples/multimodal/voice-example.ts)
+- [React Demo with UI](./examples/react/)
+
+### 5. Error Handling
 
 ```typescript
 try {
@@ -336,7 +438,7 @@ const summarize = wrap((t: string) => t, {
 ### Debug Mode
 
 ```bash
-AI_HOOK_DEBUG=true
+DEBUG=true
 ```
 
 Output:
@@ -354,7 +456,7 @@ Output:
 ### Old Way (v1.x)
 ```typescript
 // Set environment variables
-process.env.AI_HOOK_OPENAI_KEY = 'sk-...';
+process.env.OPENAI_KEY = 'sk-...';
 
 // Use providers
 import { getProvider } from 'npm-ai-hooks';

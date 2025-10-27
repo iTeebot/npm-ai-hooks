@@ -13,7 +13,7 @@ This guide will help you migrate from the old environment variable-based system 
 - **After**: Must explicitly initialize providers with `initAIHooks()`
 
 ### 3. Environment Variables No Longer Used
-- **Before**: Set `AI_HOOK_OPENAI_KEY`, `AI_HOOK_CLAUDE_KEY`, etc.
+- **Before**: Set `OPENAI_KEY`, `CLAUDE_KEY`, etc.
 - **After**: Pass API keys directly in initialization
 
 ### 4. Cross-Platform Support
@@ -35,8 +35,8 @@ yarn remove dotenv
 #### Old Way (v1.x)
 ```typescript
 // .env file
-AI_HOOK_OPENAI_KEY=sk-your-key-here
-AI_HOOK_CLAUDE_KEY=sk-ant-your-key-here
+OPENAI_KEY=sk-your-key-here
+CLAUDE_KEY=sk-ant-your-key-here
 
 // Your code
 import { wrap } from 'npm-ai-hooks';
@@ -68,8 +68,8 @@ const result = await summarize("Some text");
 #### Basic Migration
 ```typescript
 // Old: Environment variables
-process.env.AI_HOOK_OPENAI_KEY = 'sk-...';
-process.env.AI_HOOK_CLAUDE_KEY = 'sk-ant-...';
+process.env.OPENAI_KEY = 'sk-...';
+process.env.CLAUDE_KEY = 'sk-ant-...';
 
 // New: Explicit initialization
 initAIHooks({
@@ -83,7 +83,7 @@ initAIHooks({
 #### Advanced Migration with Custom Models
 ```typescript
 // Old: Environment variables + separate model configuration
-process.env.AI_HOOK_OPENAI_KEY = 'sk-...';
+process.env.OPENAI_KEY = 'sk-...';
 const summarize = wrap(fn, { 
   task: "summarize", 
   provider: "openai", 
@@ -193,7 +193,7 @@ initAIHooks({
 ### Update Test Setup
 ```typescript
 // Old test setup
-process.env.AI_HOOK_OPENAI_KEY = 'sk-test-key';
+process.env.OPENAI_KEY = 'sk-test-key';
 
 // New test setup
 import { initAIHooks, reset } from 'npm-ai-hooks';

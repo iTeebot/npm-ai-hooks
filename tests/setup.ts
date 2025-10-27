@@ -15,38 +15,38 @@ export function initializeProvidersFromEnv() {
   const providers: Array<{ provider: string; key: string }> = [];
   
   // Check for each provider's API key in environment
-  if (process.env.AI_HOOK_OPENAI_KEY) {
-    providers.push({ provider: 'openai', key: process.env.AI_HOOK_OPENAI_KEY });
+  if (process.env.OPENAI_KEY) {
+    providers.push({ provider: 'openai', key: process.env.OPENAI_KEY });
   }
-  if (process.env.AI_HOOK_CLAUDE_KEY) {
-    providers.push({ provider: 'claude', key: process.env.AI_HOOK_CLAUDE_KEY });
+  if (process.env.CLAUDE_KEY) {
+    providers.push({ provider: 'claude', key: process.env.CLAUDE_KEY });
   }
-  if (process.env.AI_HOOK_GEMINI_KEY) {
-    providers.push({ provider: 'gemini', key: process.env.AI_HOOK_GEMINI_KEY });
+  if (process.env.GEMINI_KEY) {
+    providers.push({ provider: 'gemini', key: process.env.GEMINI_KEY });
   }
-  if (process.env.AI_HOOK_GROQ_KEY) {
-    providers.push({ provider: 'groq', key: process.env.AI_HOOK_GROQ_KEY });
+  if (process.env.GROQ_KEY) {
+    providers.push({ provider: 'groq', key: process.env.GROQ_KEY });
   }
-  if (process.env.AI_HOOK_OPENROUTER_KEY) {
-    providers.push({ provider: 'openrouter', key: process.env.AI_HOOK_OPENROUTER_KEY });
+  if (process.env.OPENROUTER_KEY) {
+    providers.push({ provider: 'openrouter', key: process.env.OPENROUTER_KEY });
   }
-  if (process.env.AI_HOOK_DEEPSEEK_KEY) {
-    providers.push({ provider: 'deepseek', key: process.env.AI_HOOK_DEEPSEEK_KEY });
+  if (process.env.DEEPSEEK_KEY) {
+    providers.push({ provider: 'deepseek', key: process.env.DEEPSEEK_KEY });
   }
-  if (process.env.AI_HOOK_XAI_KEY) {
-    providers.push({ provider: 'xai', key: process.env.AI_HOOK_XAI_KEY });
+  if (process.env.XAI_KEY) {
+    providers.push({ provider: 'xai', key: process.env.XAI_KEY });
   }
-  if (process.env.AI_HOOK_PERPLEXITY_KEY) {
-    providers.push({ provider: 'perplexity', key: process.env.AI_HOOK_PERPLEXITY_KEY });
+  if (process.env.PERPLEXITY_KEY) {
+    providers.push({ provider: 'perplexity', key: process.env.PERPLEXITY_KEY });
   }
-  if (process.env.AI_HOOK_MISTRAL_KEY) {
-    providers.push({ provider: 'mistral', key: process.env.AI_HOOK_MISTRAL_KEY });
+  if (process.env.MISTRAL_KEY) {
+    providers.push({ provider: 'mistral', key: process.env.MISTRAL_KEY });
   }
   
   if (providers.length > 0) {
     initAIHooks({
       providers: providers as any, // Type assertion for compatibility
-      defaultProvider: process.env.AI_HOOK_DEFAULT_PROVIDER as any
+      defaultProvider: process.env.DEFAULT_PROVIDER as any
     });
     return true;
   }
@@ -56,15 +56,15 @@ export function initializeProvidersFromEnv() {
 
 // Helper function to check if any providers are available
 export function hasProvidersAvailable(): boolean {
-  return !!(process.env.AI_HOOK_OPENAI_KEY || 
-           process.env.AI_HOOK_CLAUDE_KEY || 
-           process.env.AI_HOOK_GEMINI_KEY || 
-           process.env.AI_HOOK_GROQ_KEY || 
-           process.env.AI_HOOK_OPENROUTER_KEY || 
-           process.env.AI_HOOK_DEEPSEEK_KEY || 
-           process.env.AI_HOOK_XAI_KEY || 
-           process.env.AI_HOOK_PERPLEXITY_KEY || 
-           process.env.AI_HOOK_MISTRAL_KEY);
+  return !!(process.env.OPENAI_KEY || 
+           process.env.CLAUDE_KEY || 
+           process.env.GEMINI_KEY || 
+           process.env.GROQ_KEY || 
+           process.env.OPENROUTER_KEY || 
+           process.env.DEEPSEEK_KEY || 
+           process.env.XAI_KEY || 
+           process.env.PERPLEXITY_KEY || 
+           process.env.MISTRAL_KEY);
 }
 
 // Mock fetch globally

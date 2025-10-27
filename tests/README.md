@@ -87,8 +87,8 @@ npm run test:ci             # CI-optimized test run
 Tests use mock API keys by default. For integration testing with real APIs, set:
 
 ```env
-AI_HOOK_OPENAI_KEY=sk-real-key
-AI_HOOK_CLAUDE_KEY=sk-real-key
+OPENAI_KEY=sk-real-key
+CLAUDE_KEY=sk-real-key
 # ... other provider keys
 ```
 
@@ -154,5 +154,5 @@ TEST_VERBOSE=true npm test
 
 Enable debug logging:
 ```bash
-AI_HOOK_DEBUG=true npm test
+DEBUG=true npm test
 ```

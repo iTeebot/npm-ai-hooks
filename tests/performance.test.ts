@@ -7,7 +7,7 @@ const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
 describe("Performance Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
+    process.env.OPENAI_KEY = "sk-valid-key";
     
     // Mock successful API response
     mockFetch.mockResolvedValue({
@@ -132,9 +132,9 @@ describe("Performance Tests", () => {
 
   describe("Provider Performance Comparison", () => {
     beforeEach(() => {
-      process.env.AI_HOOK_OPENAI_KEY = "sk-valid-key";
-      process.env.AI_HOOK_GROQ_KEY = "gr-valid-key";
-      process.env.AI_HOOK_CLAUDE_KEY = "sk-valid-key";
+      process.env.OPENAI_KEY = "sk-valid-key";
+      process.env.GROQ_KEY = "gr-valid-key";
+      process.env.CLAUDE_KEY = "sk-valid-key";
     });
 
     test("should measure performance across different providers", async () => {

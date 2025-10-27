@@ -8,6 +8,17 @@ import { XAIDefaultModel, XAIModel } from "./xai";
 import { PerplexityDefaultModel, PerplexityModel } from "./perplexity";
 import { MistralDefaultModel, MistralModel } from "./mistral";
 
+// Re-export model types
+export type { OpenAIModel } from "./openai";
+export type { OpenRouterModel } from "./openrouter";
+export type { GroqModel } from "./groq";
+export type { GeminiModel } from "./gemini";
+export type { ClaudeModel } from "./claude";
+export type { DeepSeekModel } from "./deepseek";
+export type { XAIModel } from "./xai";
+export type { PerplexityModel } from "./perplexity";
+export type { MistralModel } from "./mistral";
+
 export type Provider =  "openrouter" | "groq" | "openai" | "gemini" | "claude" | "deepseek" | "xai" | "perplexity" | "mistral";
 
 export type ProviderModels = {
@@ -48,8 +59,15 @@ export type WrapOptions<P extends Provider | undefined = undefined> =
   | {
       provider: P extends Provider ? P : never;
       model?: P extends Provider ? ProviderModels[P] : never;
-      task: TaskType;
-      targetLanguage?: string; // new optional
+      task?: TaskType;
+      targetLanguage?: string;
+      customPrompt?: string;
     }
-  | { provider?: never; model?: never; task: TaskType; targetLanguage?: string };
+  | { 
+      provider?: never; 
+      model?: never; 
+      task?: TaskType; 
+      targetLanguage?: string;
+      customPrompt?: string;
+    };
 

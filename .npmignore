@@ -1,5 +1,7 @@
 src/
 examples/
+website/
+docs/
 *.test.ts
 *.log
 node_modules/

@@ -24,6 +24,12 @@ function handleError(err: unknown): never {
   }
 }
 
+export interface MultimodalInput {
+  text?: string;
+  image?: string; // base64 encoded image
+  file?: { name: string; data: string; type: string };
+}
+
 export function wrap<T extends (...args: any[]) => any, P extends Provider | undefined = undefined>(
   fn: T,
   options: WrapOptions<P>
@@ -41,7 +47,15 @@ export function wrap<T extends (...args: any[]) => any, P extends Provider | und
 
   return async (...args: Parameters<T>) => {
     try {
-      const input = fn(...args);
+      // Await the function result to handle both sync and async functions
+      const rawInput = fn(...args);
+      const input = rawInput instanceof Promise ? await rawInput : rawInput;
+
+      // Check if input is multimodal
+      const isMultimodal = typeof input === 'object' && input !== null && ('image' in input || 'file' in input);
+      const textInput = isMultimodal ? (input as MultimodalInput).text || '' : String(input);
+      const imageData = isMultimodal ? (input as MultimodalInput).image : undefined;
+      const fileData = isMultimodal ? (input as MultimodalInput).file : undefined;
 
       // Step 1: get provider function and the actual provider name
       const { fn: providerFn, provider: providerKey } = getProvider(options.provider as Provider | undefined);
@@ -52,14 +66,33 @@ export function wrap<T extends (...args: any[]) => any, P extends Provider | und
       if (!model) {
         throw new AIHookError(
           "NO_MODEL_FOUND",
-          "No model found: You must specify a provider or pass a valid model.\n\nAt least one provider API key is required in your .env file.\n\nPlease add one of the following to your .env (see .env.example for details):\n  - AI_HOOK_OPENAI_KEY\n  - AI_HOOK_OPENROUTER_KEY\n  - AI_HOOK_GROQ_KEY\n",
+          "No model found: You must specify a provider or pass a valid model.\n\nAt least one provider API key is required in your .env file.\n\nPlease add one of the following to your .env (see .env.example for details):\n  - OPENAI_KEY\n  - OPENROUTER_KEY\n  - GROQ_KEY\n",
           options.provider as Provider | undefined,
           "Reference .env.example for setup instructions."
         );
       }
 
-      // Step 3: build prompt
-      const prompt = buildPrompt(options.task, input, (options as any).targetLanguage);
+      // Step 3: build prompt with multimodal support
+      let prompt: string;
+      if ((options as any).customPrompt) {
+        // Use custom prompt if provided
+        prompt = `${(options as any).customPrompt}\n\n${textInput}`;
+        if (imageData) {
+          prompt = `${prompt}\n\n[Image attached]`;
+        }
+        if (fileData) {
+          prompt = `${prompt}\n\n[File: ${fileData.name}]`;
+        }
+      } else {
+        // Use built-in task prompt
+        prompt = buildPrompt(options.task, textInput, (options as any).targetLanguage);
+        if (imageData) {
+          prompt = `${prompt}\n\n[Image attached]`;
+        }
+        if (fileData) {
+          prompt = `${prompt}\n\n[File: ${fileData.name}]`;
+        }
+      }
 
       const startTime = Date.now();
       let output: string;

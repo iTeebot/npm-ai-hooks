@@ -4,7 +4,7 @@
 
 Inject LLM-like behavior into any JavaScript or TypeScript function with a single line, without writing prompts, handling SDKs, or locking into any provider. Works seamlessly in both Node.js (Express) and React (Vite) environments.
 
-📚 **[View Homepage & Demos](https://labs.iteebot.com/npm-packages/npm-ai-hooks)** | 🎮 **[React Example](https://labs.iteebot.com/npm-packages/npm-ai-hooks/demo)** | 💻 **[Node.js Example](./examples/demo.ts)**
+💻 **[Node.js Example](./examples/demo.ts)**
 
 ---
 

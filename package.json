@@ -1,6 +1,6 @@
 {
   "name": "npm-ai-hooks",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Universal AI Hook Layer for Node.js and React – one wrapper for all AI providers. Inject LLM-like behavior into any JavaScript or TypeScript function with a single line, without writing prompts, handling SDKs, or locking into any provider.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

@@ -7,6 +7,7 @@ export {
   removeProvider, 
   getAvailableProviders, 
   getProvider, 
+  getProviderChain,
   isInitialized, 
   reset 
 } from "./providers";

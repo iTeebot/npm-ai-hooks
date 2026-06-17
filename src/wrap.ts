@@ -63,9 +63,9 @@ export function wrap<T extends (...args: any[]) => any, P extends Provider | und
       if (chain.length === 0) {
         throw new AIHookError(
           "NO_PROVIDER_FOUND",
-          "No valid AI provider API key was found.\n\nAt least one provider API key is required.\n\nPlease call initAIHooks() with at least one provider configuration.",
+          "No valid AI provider API key was found.\n\nIf you are using a .env file, please ensure you have installed the 'dotenv' package (npm i dotenv) and called require('dotenv').config() at the very top of your entry file.\n\nAlternatively, you can initialize providers explicitly:\ninitAIHooks({ providers: [{ provider: 'openai', key: 'your-key-here' }] })",
           options.provider as Provider | undefined,
-          "Call initAIHooks({ providers: [...] }) before using wrap()."
+          "Reference documentation for initialization instructions."
         );
       }
 

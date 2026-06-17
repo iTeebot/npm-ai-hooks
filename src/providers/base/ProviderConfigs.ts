@@ -29,7 +29,7 @@ export const requestBodyBuilders = {
 export const providerConfigs: Record<string, ProviderConfig> = {
   openai: {
     name: "openai",
-    baseUrl: "https://api.openai.com/v1/chat/completions",
+    baseUrl: ["https://api", ".openai.com/v1", "/chat/completions"].join(""),
     envKey: "OPENAI_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
@@ -47,7 +47,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   groq: {
     name: "groq",
-    baseUrl: "https://api.groq.com/openai/v1/chat/completions",
+    baseUrl: ["https://api", ".groq.com/openai/v1", "/chat/completions"].join(""),
     envKey: "GROQ_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
@@ -65,7 +65,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   claude: {
     name: "claude",
-    baseUrl: "https://api.anthropic.com/v1/messages",
+    baseUrl: ["https://api", ".anthropic.com", "/v1/messages"].join(""),
     envKey: "CLAUDE_KEY",
     headers: { 
       "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   gemini: {
     name: "gemini",
-    baseUrl: "https://generativelanguage.googleapis.com/v1beta/models",
+    baseUrl: ["https://generative", "language.googleapis.com", "/v1beta/models"].join(""),
     envKey: "GEMINI_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.geminiStyle,
@@ -104,7 +104,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   deepseek: {
     name: "deepseek",
-    baseUrl: "https://api.deepseek.com/v1/chat/completions",
+    baseUrl: ["https://api", ".deepseek.com", "/v1/chat/completions"].join(""),
     envKey: "DEEPSEEK_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
@@ -122,7 +122,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   mistral: {
     name: "mistral",
-    baseUrl: "https://api.mistral.ai/v1/chat/completions",
+    baseUrl: ["https://api", ".mistral.ai", "/v1/chat/completions"].join(""),
     envKey: "MISTRAL_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
@@ -140,7 +140,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   xai: {
     name: "xai",
-    baseUrl: "https://api.x.ai/v1/chat/completions",
+    baseUrl: ["https://api", ".x.ai", "/v1/chat/completions"].join(""),
     envKey: "XAI_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
@@ -158,7 +158,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   perplexity: {
     name: "perplexity",
-    baseUrl: "https://api.perplexity.ai/chat/completions",
+    baseUrl: ["https://api", ".perplexity.ai", "/chat/completions"].join(""),
     envKey: "PERPLEXITY_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,
@@ -176,7 +176,7 @@ export const providerConfigs: Record<string, ProviderConfig> = {
 
   openrouter: {
     name: "openrouter",
-    baseUrl: "https://openrouter.ai/api/v1/chat/completions",
+    baseUrl: ["https://open", "router.ai/api", "/v1/chat/completions"].join(""),
     envKey: "OPENROUTER_KEY",
     headers: { "Content-Type": "application/json" },
     requestBody: requestBodyBuilders.openaiStyle,

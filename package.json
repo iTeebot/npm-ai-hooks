@@ -1,6 +1,6 @@
 {
   "name": "npm-ai-hooks",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Universal AI Hook Layer for Node.js and React – one wrapper for all AI providers. Inject LLM-like behavior into any JavaScript or TypeScript function with a single line, without writing prompts, handling SDKs, or locking into any provider.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -48,19 +48,16 @@
     "url": "git+https://github.com/iTeebot/npm-ai-hooks.git"
   },
   "license": "MIT",
-  "dependencies": {
-    "axios": "^1.12.2"
-  },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.7.0",
-    "eslint": "^9.37.0",
+    "@types/node": "^25.9.3",
+    "eslint": "^10.5.0",
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.4.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "keywords": [
     "ai",

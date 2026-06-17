@@ -151,8 +151,9 @@ describe("Provider Tests (New Initialization System)", () => {
         provider: "openai" 
       });
 
-      // Expect the API to respond with invalid key error (which proves it's working)
-      await expect(summarize(TEST_INPUTS.medium)).rejects.toThrow("Invalid OpenAI API key");
+      // Expect the API to successfully parse the mocked response
+      const result = await summarize(TEST_INPUTS.medium);
+      expect(result.output).toBe(MOCK_RESPONSE);
     }, TEST_TIMEOUT);
 
     test("should work with Claude provider", async () => {
@@ -167,8 +168,17 @@ describe("Provider Tests (New Initialization System)", () => {
         provider: "claude" 
       });
 
-      // Expect the API to respond with invalid key error (which proves it's working)
-      await expect(explain(TEST_INPUTS.code)).rejects.toThrow("Invalid Claude API key");
+      // Mock Claude response shape
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          content: [{ text: MOCK_RESPONSE }]
+        })
+      } as Response);
+
+      // Expect the API to successfully parse the mocked response
+      const result = await explain(TEST_INPUTS.code);
+      expect(result.output).toBe(MOCK_RESPONSE);
     }, TEST_TIMEOUT);
 
     test("should work with Groq provider", async () => {
@@ -183,8 +193,9 @@ describe("Provider Tests (New Initialization System)", () => {
         provider: "groq" 
       });
 
-      // Expect the API to respond with invalid key error (which proves it's working)
-      await expect(rewrite(TEST_INPUTS.medium)).rejects.toThrow("Invalid Groq API key");
+      // Expect the API to successfully parse the mocked response
+      const result = await rewrite(TEST_INPUTS.medium);
+      expect(result.output).toBe(MOCK_RESPONSE);
     }, TEST_TIMEOUT);
   });
 

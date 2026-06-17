@@ -14,6 +14,7 @@ import {
   removeProvider, 
   getAvailableProviders as getNewAvailableProviders,
   getProvider as getNewProvider,
+  getProviderChain as getNewProviderChain,
   isInitialized,
   reset,
   UserProviderConfig,
@@ -99,6 +100,34 @@ export function getProvider(name?: Provider): { fn: ProviderFunction<any>; provi
     undefined,
     "Reference .env.example for setup instructions."
   );
+}
+
+// Returns the full ordered provider chain for fallback (new system only)
+export function getProviderChain(name?: Provider): Array<{ fn: ProviderFunction<any>; provider: Provider }> {
+  if (isInitialized()) {
+    return getNewProviderChain(name);
+  }
+
+  // Legacy fallback: wrap available providers into a chain
+  const available = getAvailableProviders() as Provider[];
+  const seen = new Set<Provider>();
+  const chain: Array<{ fn: ProviderFunction<any>; provider: Provider }> = [];
+
+  const tryPush = (p: Provider) => {
+    if (!seen.has(p) && providers[p]) {
+      seen.add(p);
+      chain.push({ fn: providers[p], provider: p });
+    }
+  };
+
+  // Explicit name first
+  if (name) tryPush(name);
+  // OpenRouter preferred
+  tryPush('openrouter');
+  // Rest in availability order
+  for (const p of available) tryPush(p);
+
+  return chain;
 }
 
 // Export the new initialization system

@@ -99,6 +99,43 @@ export class ProviderManager {
     return Array.from(this.providers.keys());
   }
 
+  /**
+   * Returns the full ordered list of providers to try for a given request.
+   * Order: explicit name → defaultProvider → openrouter → rest in registration order.
+   * Used by the fallback mechanism in wrap().
+   */
+  getProviderChain(name?: Provider): Array<{ fn: any; provider: Provider }> {
+    const available = this.getAvailableProviders();
+
+    if (available.length === 0) {
+      throw new Error('No providers initialized. Please initialize providers first.');
+    }
+
+    const seen = new Set<Provider>();
+    const chain: Array<{ fn: any; provider: Provider }> = [];
+
+    const push = (p: Provider) => {
+      if (!seen.has(p) && this.providerFunctions.has(p)) {
+        seen.add(p);
+        chain.push({ fn: this.providerFunctions.get(p), provider: p });
+      }
+    };
+
+    // 1. Explicitly requested provider goes first
+    if (name) push(name);
+
+    // 2. Default provider next
+    if (this.defaultProvider) push(this.defaultProvider);
+
+    // 3. OpenRouter preferred over generic providers
+    push('openrouter' as Provider);
+
+    // 4. Rest in registration order
+    for (const p of available) push(p);
+
+    return chain;
+  }
+
   getProvider(name?: Provider): { fn: any; provider: Provider } {
     const available = this.getAvailableProviders();
 
@@ -106,24 +143,16 @@ export class ProviderManager {
       throw new Error('No providers initialized. Please initialize providers first.');
     }
 
-    // 1. If user specified provider and it's available
-    if (name && this.providerFunctions.has(name)) {
-      return { fn: this.providerFunctions.get(name), provider: name };
+    // If user explicitly requested a specific provider, it MUST be available
+    if (name) {
+      if (this.providerFunctions.has(name)) {
+        return { fn: this.providerFunctions.get(name), provider: name };
+      }
+      throw new Error(`Provider "${name}" is not initialized. Available providers: ${available.join(', ')}`);
     }
 
-    // 2. If default provider is specified and available
-    if (this.defaultProvider && this.providerFunctions.has(this.defaultProvider)) {
-      return { fn: this.providerFunctions.get(this.defaultProvider), provider: this.defaultProvider };
-    }
-
-    // 3. Prefer OpenRouter if available
-    if (this.providerFunctions.has('openrouter')) {
-      return { fn: this.providerFunctions.get('openrouter'), provider: 'openrouter' };
-    }
-
-    // 4. Use first available provider
-    const firstProvider = available[0];
-    return { fn: this.providerFunctions.get(firstProvider), provider: firstProvider };
+    const chain = this.getProviderChain();
+    return chain[0];
   }
 
   addProvider(config: UserProviderConfig): void {

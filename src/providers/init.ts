@@ -75,6 +75,18 @@ export function getProvider(name?: Provider): { fn: any; provider: Provider } {
 }
 
 /**
+ * Get the full ordered provider chain for fallback
+ * @param name - Optional preferred provider name (placed first)
+ * @returns Ordered array of {fn, provider} to try in sequence
+ */
+export function getProviderChain(name?: Provider): Array<{ fn: any; provider: Provider }> {
+  if (!providerManager) {
+    throw new Error('AI hooks not initialized. Call initAIHooks() first.');
+  }
+  return providerManager.getProviderChain(name);
+}
+
+/**
  * Check if AI hooks is initialized
  * @returns True if initialized
  */

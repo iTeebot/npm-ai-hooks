@@ -3,8 +3,10 @@
  * Tests all available providers to verify they're working
  */
 
-import * as dotenv from "dotenv";
-dotenv.config();
+// Load environment variables from .env file for testing
+// Note: If running locally, please run `npm install dotenv` and uncomment:
+// import * as dotenv from "dotenv";
+// dotenv.config();
 
 // Set test environment to prevent process.exit on errors
 process.env.NODE_ENV = "test";

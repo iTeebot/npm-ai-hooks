@@ -96,9 +96,9 @@ export function getProvider(name?: Provider): { fn: ProviderFunction<any>; provi
   // 3. No valid keys found → throw error (single instruction, no fallback)
   throw new AIHookError(
     "NO_PROVIDER_FOUND",
-    "No valid AI provider API key was found.\n\nAt least one provider API key is required in your .env file.\n\nPlease add one of the following to your .env (see .env.example for details):\n  - OPENAI_KEY\n  - OPENROUTER_KEY\n  - GROQ_KEY\n",
+    "No valid AI provider API key was found.\n\nIf you are using a .env file, please ensure you have installed the 'dotenv' package (npm i dotenv) and called require('dotenv').config() at the very top of your entry file.\n\nAlternatively, you can initialize providers explicitly:\ninitAIHooks({ providers: [{ provider: 'openai', key: 'your-key-here' }] })",
     undefined,
-    "Reference .env.example for setup instructions."
+    "Reference documentation for setup instructions."
   );
 }
 

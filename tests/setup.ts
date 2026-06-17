@@ -1,9 +1,5 @@
 // Test setup file
-import * as dotenv from "dotenv";
 import { initAIHooks, reset } from "../src/providers";
-
-// Load environment variables from .env file for testing
-dotenv.config();
 
 // Set test environment
 process.env.NODE_ENV = "test";

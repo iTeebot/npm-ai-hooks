@@ -1,10 +1,9 @@
 import { Router, Request, Response } from "express";
 import { initAIHooks } from "npm-ai-hooks";
 import { wrap } from "npm-ai-hooks";
-import * as dotenv from "dotenv";
-
-// Load environment variables
-dotenv.config();
+// Note: If running locally with a .env file, ensure you install dotenv and uncomment:
+// import * as dotenv from "dotenv";
+// dotenv.config();
 
 // Initialize providers with environment variables
 const providers: Array<{ provider: string; key: string; defaultModel?: string }> = [];

@@ -1,5 +1,15 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { AIHookError } from "../../errors";
+
+export interface FetchRequestConfig {
+  url: string;
+  method?: string;
+  data?: any;
+  headers?: Record<string, string>;
+}
+
+export interface FetchResponse {
+  data: any;
+}
 
 export interface ProviderConfig {
   name: string;
@@ -7,7 +17,7 @@ export interface ProviderConfig {
   envKey: string;
   headers: Record<string, string>;
   requestBody: (prompt: string, model: string) => any;
-  responseParser: (response: AxiosResponse) => string;
+  responseParser: (response: FetchResponse) => string;
   errorMessages: {
     missingKey: string;
     emptyResponse: string;
@@ -62,7 +72,7 @@ export class BaseProvider {
     }
   }
 
-  protected buildRequestConfig(prompt: string, model: string, apiKey: string): AxiosRequestConfig {
+  protected buildRequestConfig(prompt: string, model: string, apiKey: string): FetchRequestConfig {
     return {
       url: this.config.baseUrl,
       method: "POST",
@@ -80,11 +90,48 @@ export class BaseProvider {
     };
   }
 
-  protected async makeRequest(config: AxiosRequestConfig): Promise<AxiosResponse> {
-    return axios(config);
+  protected async makeRequest(config: FetchRequestConfig): Promise<FetchResponse> {
+    try {
+      const response = await fetch(config.url, {
+        method: config.method || "POST",
+        headers: config.headers as any,
+        body: config.data ? JSON.stringify(config.data) : undefined,
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (e) {
+        data = await response.text();
+      }
+
+      if (!response.ok) {
+        // Emulate axios error shape for the error handler
+        throw Object.assign(new Error(`Request failed with status code ${response.status}`), {
+          response: {
+            status: response.status,
+            statusText: response.statusText,
+            data: data
+          }
+        });
+      }
+
+      return { data };
+    } catch (error: any) {
+      // If it's already an HTTP error we just threw, rethrow it
+      if (error.response) {
+        throw error;
+      }
+      
+      // Otherwise, it's a network error (e.g. fetch failed entirely)
+      // Emulate axios network error shape
+      throw Object.assign(new Error(error.message || "Network Error"), {
+        request: {}
+      });
+    }
   }
 
-  protected parseResponse(response: AxiosResponse): string {
+  protected parseResponse(response: FetchResponse): string {
     const output = this.config.responseParser(response);
     if (!output) {
       throw new AIHookError(

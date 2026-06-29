@@ -1,6 +1,6 @@
 {
   "name": "npm-ai-hooks",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Universal AI Hook Layer for Node.js and React – one wrapper for all AI providers. Inject LLM-like behavior into any JavaScript or TypeScript function with a single line, without writing prompts, handling SDKs, or locking into any provider.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -34,7 +34,7 @@
     "test:performance": "jest tests/performance.test.ts --verbose",
     "test:env": "jest --testNamePattern=\"Real API|Environment-based\" --verbose",
     "test:mock": "jest --testNamePattern=\"Provider Detection|Task Tests\" --verbose",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "npm run build",
     "demo": "npx ts-node examples/demo.ts",
@@ -49,15 +49,17 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.0.1",
     "eslint": "^10.5.0",
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.4.4",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.0"
   },
   "keywords": [
     "ai",
@@ -90,5 +92,8 @@
   "allowScripts": {
     "fsevents@2.3.3": true,
     "unrs-resolver@1.12.2": true
+  },
+  "overrides": {
+    "js-yaml": "^5.2.0"
   }
 }

@@ -37,7 +37,7 @@ export async function validateApiKey(provider: Provider, apiKey: string): Promis
       case 'openrouter':
         providerInstance = new OpenRouterProvider();
         break;
-      default:
+      default: {
         const config = providerConfigs[provider];
         if (!config) {
           return {
@@ -48,10 +48,13 @@ export async function validateApiKey(provider: Provider, apiKey: string): Promis
           };
         }
         providerInstance = new BaseProvider(config);
+        break;
+      }
     }
 
     // Set the API key temporarily
-    (providerInstance as any).apiKey = apiKey;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (providerInstance as any).getApiKey = () => apiKey;
 
     // Make a minimal test request
     const testPrompt = "Hi";
@@ -65,9 +68,10 @@ export async function validateApiKey(provider: Provider, apiKey: string): Promis
       message: 'API key is valid'
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     // Check for common error types
-    if (error.message?.includes('401') || error.message?.includes('Unauthorized') || error.message?.includes('Invalid API key')) {
+    if (err.message?.includes('401') || err.message?.includes('Unauthorized') || err.message?.includes('Invalid API key')) {
       return {
         valid: false,
         provider,
@@ -76,7 +80,7 @@ export async function validateApiKey(provider: Provider, apiKey: string): Promis
       };
     }
 
-    if (error.message?.includes('403') || error.message?.includes('Forbidden')) {
+    if (err.message?.includes('403') || err.message?.includes('Forbidden')) {
       return {
         valid: false,
         provider,
@@ -85,7 +89,7 @@ export async function validateApiKey(provider: Provider, apiKey: string): Promis
       };
     }
 
-    if (error.message?.includes('429') || error.message?.includes('rate limit')) {
+    if (err.message?.includes('429') || err.message?.includes('rate limit')) {
       // Rate limit means the key is valid, just too many requests
       return {
         valid: true,

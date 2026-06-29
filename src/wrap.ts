@@ -1,12 +1,12 @@
 // dotenv removed - using explicit provider initialization instead
-import { getProvider, getProviderChain } from "./providers";
+import { getProviderChain } from "./providers";
 import { WrapOptions, TaskType, Provider, DEFAULT_MODEL } from "./types";
 import { AIHookError } from "./errors";
 
 function handleError(err: unknown): never {
-  if (err && typeof err === "object" && "pretty" in err && typeof (err as any).pretty === "function") {
+  if (err instanceof AIHookError) {
     // Print pretty message
-    console.error((err as any).pretty());
+    console.error(err.pretty());
     // Only exit in Node.js test environment, not in browser
     if (typeof process !== "undefined" && process.env.NODE_ENV !== "test" && !process.env.JEST_WORKER_ID) {
       process.exit(1);
@@ -30,10 +30,22 @@ export interface MultimodalInput {
   file?: { name: string; data: string; type: string };
 }
 
+export interface WrapResultMeta {
+  provider: Provider;
+  model: string;
+  task?: TaskType;
+  targetLanguage?: string;
+  cached: boolean;
+  estimatedCostUSD: number;
+  latencyMs: number;
+  fallback: boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function wrap<T extends (...args: any[]) => any, P extends Provider | undefined = undefined>(
   fn: T,
   options: WrapOptions<P>
-): (...args: Parameters<T>) => Promise<{ output: string; meta: any }> {
+): (...args: Parameters<T>) => Promise<{ output: string; meta: WrapResultMeta }> {
   // Validate task type immediately when wrap() is called
   const validTasks: TaskType[] = ["summarize", "translate", "explain", "rewrite", "sentiment", "codeReview"];
   if (options.task && !validTasks.includes(options.task)) {
@@ -83,12 +95,12 @@ export function wrap<T extends (...args: any[]) => any, P extends Provider | und
 
         // Step 3: build prompt with multimodal support
         let prompt: string;
-        if ((options as any).customPrompt) {
-          prompt = `${(options as any).customPrompt}\n\n${textInput}`;
+        if (options.customPrompt) {
+          prompt = `${options.customPrompt}\n\n${textInput}`;
           if (imageData) prompt = `${prompt}\n\n[Image attached]`;
           if (fileData) prompt = `${prompt}\n\n[File: ${fileData.name}]`;
         } else {
-          prompt = buildPrompt(options.task, textInput, (options as any).targetLanguage);
+          prompt = buildPrompt(options.task, textInput, options.targetLanguage);
           if (imageData) prompt = `${prompt}\n\n[Image attached]`;
           if (fileData) prompt = `${prompt}\n\n[File: ${fileData.name}]`;
         }
@@ -110,7 +122,7 @@ export function wrap<T extends (...args: any[]) => any, P extends Provider | und
               provider: providerKey,
               model,
               task: options.task,
-              targetLanguage: (options as any).targetLanguage,
+              targetLanguage: options.targetLanguage,
               cached: false,
               estimatedCostUSD: 0.0,
               latencyMs: endTime - startTime,
@@ -133,7 +145,7 @@ export function wrap<T extends (...args: any[]) => any, P extends Provider | und
     } catch (err) {
       if (err instanceof AIHookError) {
         // Log the pretty message for developer visibility, then re-throw
-        console.error((err as any).pretty());
+        console.error(err.pretty());
         throw err;
       }
       handleError(err);
@@ -149,9 +161,10 @@ function buildPrompt(task: TaskType | undefined, text: string, targetLanguage?: 
   switch (task) {
     case "summarize":
       return `Summarize the following text:\n${text}`;
-    case "translate":
+    case "translate": {
       const language = targetLanguage || "English"; // default to English
       return `Translate this text into ${language}:\n${text}`;
+    }
     case "explain":
       return `Explain this clearly:\n${text}`;
     case "rewrite":

@@ -6,7 +6,7 @@ import { wrap } from "npm-ai-hooks";
 // dotenv.config();
 
 // Initialize providers with environment variables
-const providers: Array<{ provider: string; key: string; defaultModel?: string }> = [];
+const providers: Array<{ provider: 'openai' | 'groq' | 'claude' | 'gemini' | 'openrouter'; key: string; defaultModel?: string }> = [];
 
 if (process.env.OPENAI_KEY) {
   providers.push({
@@ -50,8 +50,8 @@ if (process.env.OPENROUTER_KEY) {
 // Initialize with available providers
 if (providers.length > 0) {
   initAIHooks({
-    providers: providers as any,
-    defaultProvider: 'gemini' as any
+    providers,
+    defaultProvider: 'gemini'
   });
   console.log(`✅ Initialized ${providers.length} AI providers for Express server`);
 } else {
@@ -77,11 +77,12 @@ router.get("/", async (req: Request, res: Response) => {
       summary: result.output,
       meta: result.meta
     });
-  } catch (error: any) {
-    console.error("Summarize Error:", error);
+  } catch (error: unknown) {
+    const err = error as Error & { provider?: string };
+    console.error("Summarize Error:", err);
     return res.status(500).json({
-      error: error.message || "Internal Server Error",
-      provider: error.provider || null
+      error: err.message || "Internal Server Error",
+      provider: err.provider || null
     });
   }
 });

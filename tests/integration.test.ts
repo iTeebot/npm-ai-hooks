@@ -39,6 +39,7 @@ describe("Integration Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     reset();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, "makeRequest");
   });
 
@@ -142,7 +143,7 @@ describe("Integration Tests", () => {
         });
 
         // Each wrapped fn pins a specific provider — return appropriate shape
-        makeRequestSpy.mockImplementation((_config: any) =>
+        makeRequestSpy.mockImplementation((_config: unknown) =>
           Promise.resolve(SUCCESS_RESPONSE)
         );
 
@@ -154,7 +155,7 @@ describe("Integration Tests", () => {
           task: "translate",
           provider: "claude",
           targetLanguage: "es"
-        } as any);
+        });
         const explain = wrap((text: string) => text, {
           task: "explain",
           provider: "groq"
@@ -162,7 +163,7 @@ describe("Integration Tests", () => {
 
         // Claude uses a different response shape — patch just for claude calls
         let callIndex = 0;
-        makeRequestSpy.mockImplementation((_config: any) => {
+        makeRequestSpy.mockImplementation((_config: unknown) => {
           callIndex++;
           // translate is the 2nd call (claude) — return claude-style response
           if (callIndex === 2) {
@@ -195,7 +196,7 @@ describe("Integration Tests", () => {
         });
 
         let callIndex = 0;
-        makeRequestSpy.mockImplementation((_config: any) => {
+        makeRequestSpy.mockImplementation((_config: unknown) => {
           callIndex++;
           // Second call is claude (translate) — return claude-style response
           if (callIndex === 2) {
@@ -212,7 +213,7 @@ describe("Integration Tests", () => {
           task: "translate",
           provider: "claude",
           targetLanguage: "fr"
-        } as any);
+        });
 
         const summary = await summarize(TEST_INPUTS.long);
         const translation = await translate(summary.output);

@@ -45,7 +45,13 @@ export class OpenRouterProvider extends BaseProvider {
     super(providerConfigs.openrouter);
   }
 
-  protected handleHttpError(error: any) {
+  protected handleHttpError(error: Error & {
+    response: {
+      status: number;
+      statusText?: string;
+      data?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    };
+  }) {
     const status = error.response.status;
     const text = error.response.data?.error
       ? JSON.stringify(error.response.data.error)

@@ -1,4 +1,4 @@
-import { Provider, ProviderModels, DEFAULT_MODEL } from "../../types";
+import { Provider, DEFAULT_MODEL } from "../../types";
 import { BaseProvider } from "./BaseProvider";
 import { providerConfigs } from "./ProviderConfigs";
 import { ClaudeProvider, GeminiProvider, OpenRouterProvider } from "./SpecializedProviders";
@@ -17,7 +17,7 @@ export interface ProviderInitializationOptions {
 export class ProviderManager {
   private providers = new Map<Provider, { key: string; defaultModel?: string }>();
   private defaultProvider?: Provider;
-  private providerFunctions = new Map<Provider, any>();
+  private providerFunctions = new Map<Provider, (prompt: string, model?: string) => Promise<string>>();
 
   constructor(options: ProviderInitializationOptions) {
     this.initializeProviders(options);
@@ -104,7 +104,7 @@ export class ProviderManager {
    * Order: explicit name → defaultProvider → openrouter → rest in registration order.
    * Used by the fallback mechanism in wrap().
    */
-  getProviderChain(name?: Provider): Array<{ fn: any; provider: Provider }> {
+  getProviderChain(name?: Provider): Array<{ fn: (prompt: string, model?: string) => Promise<string>; provider: Provider }> {
     const available = this.getAvailableProviders();
 
     if (available.length === 0) {
@@ -112,12 +112,12 @@ export class ProviderManager {
     }
 
     const seen = new Set<Provider>();
-    const chain: Array<{ fn: any; provider: Provider }> = [];
+    const chain: Array<{ fn: (prompt: string, model?: string) => Promise<string>; provider: Provider }> = [];
 
     const push = (p: Provider) => {
       if (!seen.has(p) && this.providerFunctions.has(p)) {
         seen.add(p);
-        chain.push({ fn: this.providerFunctions.get(p), provider: p });
+        chain.push({ fn: this.providerFunctions.get(p)!, provider: p });
       }
     };
 
@@ -136,7 +136,7 @@ export class ProviderManager {
     return chain;
   }
 
-  getProvider(name?: Provider): { fn: any; provider: Provider } {
+  getProvider(name?: Provider): { fn: (prompt: string, model?: string) => Promise<string>; provider: Provider } {
     const available = this.getAvailableProviders();
 
     if (available.length === 0) {
@@ -146,7 +146,7 @@ export class ProviderManager {
     // If user explicitly requested a specific provider, it MUST be available
     if (name) {
       if (this.providerFunctions.has(name)) {
-        return { fn: this.providerFunctions.get(name), provider: name };
+        return { fn: this.providerFunctions.get(name)!, provider: name };
       }
       throw new Error(`Provider "${name}" is not initialized. Available providers: ${available.join(', ')}`);
     }

@@ -4,6 +4,7 @@ import { ProviderFunction } from "../../types/core/providers";
 
 export class ProviderRegistry {
   private providers = new Map<Provider, BaseProvider>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private providerFunctions = new Map<Provider, ProviderFunction<any>>();
 
   register<T extends Provider>(name: T, provider: BaseProvider): void {
@@ -11,6 +12,7 @@ export class ProviderRegistry {
     this.providerFunctions.set(name, this.createProviderFunction(provider));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(name: Provider): ProviderFunction<any> | undefined {
     return this.providerFunctions.get(name);
   }
@@ -43,6 +45,7 @@ export class ProviderRegistry {
     return available;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private createProviderFunction(provider: BaseProvider): ProviderFunction<any> {
     return async (prompt: string, model: string) => {
       return provider.call(prompt, model);

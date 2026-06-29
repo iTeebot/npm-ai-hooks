@@ -161,6 +161,7 @@ export {
   extractTextFromImage,
   reviewCodeScreenshot,
   analyzeDocument,
-  compareImages
+  compareImages,
+  main
 };
 

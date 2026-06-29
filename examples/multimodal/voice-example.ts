@@ -209,6 +209,7 @@ export {
   voiceConversation,
   processVoiceCommand,
   translateVoiceInput,
-  voiceCodeReview
+  voiceCodeReview,
+  main
 };
 

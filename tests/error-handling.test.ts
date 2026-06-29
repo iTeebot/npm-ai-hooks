@@ -24,6 +24,7 @@ describe("Error Handling Tests", () => {
     reset();
 
     // Default spy that resolves successfully — individual tests can override
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, "makeRequest").mockResolvedValue({
       data: { choices: [{ message: { content: "Processed input" } }] }
     });
@@ -403,7 +404,7 @@ describe("Error Handling Tests", () => {
         data: { choices: [{ message: { content: "Processed null input" } }] }
       });
 
-      const summarize = wrap((text: any) => text, { task: "summarize" });
+      const summarize = wrap((text: unknown) => text, { task: "summarize" });
 
       const result = await summarize(null);
       expect(result.output).toBe("Processed null input");
@@ -416,7 +417,7 @@ describe("Error Handling Tests", () => {
         data: { choices: [{ message: { content: "Processed undefined input" } }] }
       });
 
-      const summarize = wrap((text: any) => text, { task: "summarize" });
+      const summarize = wrap((text: unknown) => text, { task: "summarize" });
 
       const result = await summarize(undefined);
       expect(result.output).toBe("Processed undefined input");
@@ -429,7 +430,7 @@ describe("Error Handling Tests", () => {
         data: { choices: [{ message: { content: "Processed number input" } }] }
       });
 
-      const summarize = wrap((text: any) => text, { task: "summarize" });
+      const summarize = wrap((text: unknown) => text, { task: "summarize" });
 
       const result = await summarize(123);
       expect(result.output).toBe("Processed number input");

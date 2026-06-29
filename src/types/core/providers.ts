@@ -14,5 +14,6 @@ export interface ProviderMap {
   xai: ProviderFunction<"xai">;
   perplexity: ProviderFunction<"perplexity">;
   mistral: ProviderFunction<"mistral">;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mock: ProviderFunction<any>; // generic fallback for mock
 }

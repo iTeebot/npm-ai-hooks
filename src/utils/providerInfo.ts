@@ -1,4 +1,4 @@
-import type { Provider, ProviderModels } from "../types";
+import type { Provider } from "../types";
 
 // Provider display names
 export const PROVIDER_NAMES: Record<Provider, string> = {

@@ -11,6 +11,7 @@ describe("Performance Tests", () => {
     reset();
     initAIHooks({ providers: [{ provider: "openai", key: "sk-valid-key" }] });
     makeRequestSpy = jest
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .spyOn(BaseProvider.prototype as any, "makeRequest")
       .mockResolvedValue({
         data: { choices: [{ message: { content: "Mock response" } }] },

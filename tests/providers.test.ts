@@ -1,5 +1,5 @@
 import { wrap } from "../src/wrap";
-import { initAIHooks, getProvider, getAvailableProviders, reset } from "../src/providers";
+import { initAIHooks, getProvider, getAvailableProviders, reset, addProvider, removeProvider } from "../src/providers";
 import { TEST_INPUTS, MOCK_RESPONSE, TEST_TIMEOUT, initializeProvidersFromEnv, hasProvidersAvailable } from "./setup";
 import { BaseProvider } from "../src/providers/base/BaseProvider";
 
@@ -231,6 +231,7 @@ describe("Provider Tests (New Initialization System)", () => {
       const summarize = wrap((text: string) => text, { task: "summarize" });
 
       // Mock 429 via BaseProvider.makeRequest spy
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, 'makeRequest');
       makeRequestSpy.mockRejectedValueOnce(Object.assign(new Error("Request failed"), {
         response: { status: 429, data: { error: { message: "Rate limit exceeded" } }, statusText: "Too Many Requests" }
@@ -254,6 +255,7 @@ describe("Provider Tests (New Initialization System)", () => {
       });
 
       // Mock 400 via BaseProvider.makeRequest spy
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, 'makeRequest');
       makeRequestSpy.mockRejectedValueOnce(Object.assign(new Error("Request failed"), {
         response: { status: 400, data: { error: { message: "Model not found" } }, statusText: "Bad Request" }
@@ -273,6 +275,7 @@ describe("Provider Tests (New Initialization System)", () => {
       const summarize = wrap((text: string) => text, { task: "summarize" });
 
       // Mock network error via BaseProvider.makeRequest spy
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, 'makeRequest');
       makeRequestSpy.mockRejectedValueOnce(Object.assign(new Error("Network error"), {
         request: {} // has request but no response = network error path
@@ -295,6 +298,7 @@ describe("Provider Tests (New Initialization System)", () => {
       const summarize = wrap((text: string) => text, { task: "summarize" });
 
       // Spy on makeRequest to simulate both providers failing with 401
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, 'makeRequest');
       makeRequestSpy
         .mockRejectedValueOnce(Object.assign(new Error("Request failed"), {
@@ -320,6 +324,7 @@ describe("Provider Tests (New Initialization System)", () => {
       const summarize = wrap((text: string) => text, { task: "summarize" });
 
       // First call (OpenAI) → 401, second call (Groq) → success
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, 'makeRequest');
       makeRequestSpy
         .mockRejectedValueOnce(Object.assign(new Error("Request failed"), {
@@ -348,6 +353,7 @@ describe("Provider Tests (New Initialization System)", () => {
       const summarize = wrap((text: string) => text, { task: "summarize" });
 
       // OpenAI 401 → Gemini 401 → Groq succeeds
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, 'makeRequest');
       makeRequestSpy
         .mockRejectedValueOnce(Object.assign(new Error("Request failed"), {
@@ -377,7 +383,6 @@ describe("Provider Tests (New Initialization System)", () => {
         ]
       });
 
-      const { addProvider } = require("../src/providers");
       addProvider({ provider: 'claude', key: 'sk-test-key' });
 
       const providers = getAvailableProviders();
@@ -393,7 +398,6 @@ describe("Provider Tests (New Initialization System)", () => {
         ]
       });
 
-      const { removeProvider } = require("../src/providers");
       removeProvider('claude');
 
       const providers = getAvailableProviders();

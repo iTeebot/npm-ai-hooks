@@ -54,7 +54,7 @@ const providers: ProviderMap = {
   xai: providerRegistry.get("xai")!,
   perplexity: providerRegistry.get("perplexity")!,
   mistral: providerRegistry.get("mistral")!,
-  mock: async (prompt: string, model?: string) => `[MOCK OUTPUT] ${prompt}`
+  mock: async (prompt: string, _model?: string) => `[MOCK OUTPUT] ${prompt}`
 };
 
 // Returns an array of providers whose API keys exist in environment (legacy)
@@ -68,7 +68,7 @@ export function getAvailableProviders(): Provider[] {
   return providerRegistry.getAvailableProviders();
 }
 
-// Returns both the provider function and the actual provider name (legacy)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getProvider(name?: Provider): { fn: ProviderFunction<any>; provider: Provider | "mock" } {
   // If new system is initialized, use it
   if (isInitialized()) {
@@ -102,7 +102,7 @@ export function getProvider(name?: Provider): { fn: ProviderFunction<any>; provi
   );
 }
 
-// Returns the full ordered provider chain for fallback (new system only)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getProviderChain(name?: Provider): Array<{ fn: ProviderFunction<any>; provider: Provider }> {
   if (isInitialized()) {
     return getNewProviderChain(name);
@@ -111,6 +111,7 @@ export function getProviderChain(name?: Provider): Array<{ fn: ProviderFunction<
   // Legacy fallback: wrap available providers into a chain
   const available = getAvailableProviders() as Provider[];
   const seen = new Set<Provider>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const chain: Array<{ fn: ProviderFunction<any>; provider: Provider }> = [];
 
   const tryPush = (p: Provider) => {

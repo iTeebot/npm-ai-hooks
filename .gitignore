@@ -27,3 +27,6 @@ build/
 __tests__
 
 *.tgz
+
+# Test coverage
+coverage/

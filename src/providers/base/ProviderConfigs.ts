@@ -1,10 +1,13 @@
-import { ProviderConfig } from "./BaseProvider";
+import { FetchResponse, ProviderConfig } from "./BaseProvider";
 
 // Common response parsers
 export const responseParsers = {
-  openaiStyle: (response: any) => response.data?.choices?.[0]?.message?.content,
-  claudeStyle: (response: any) => response.data?.content?.[0]?.text,
-  geminiStyle: (response: any) => response.data?.candidates?.[0]?.content?.parts?.[0]?.text,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  openaiStyle: (response: FetchResponse) => (response.data as any)?.choices?.[0]?.message?.content,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  claudeStyle: (response: FetchResponse) => (response.data as any)?.content?.[0]?.text,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  geminiStyle: (response: FetchResponse) => (response.data as any)?.candidates?.[0]?.content?.parts?.[0]?.text,
 };
 
 // Common request body builders
@@ -18,7 +21,7 @@ export const requestBodyBuilders = {
     max_tokens: 4096,
     messages: [{ role: "user", content: prompt }]
   }),
-  geminiStyle: (prompt: string, model: string) => ({
+  geminiStyle: (prompt: string, _model: string) => ({
     contents: [{
       parts: [{ text: prompt }]
     }]

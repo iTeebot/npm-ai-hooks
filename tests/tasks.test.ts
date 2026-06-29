@@ -18,6 +18,7 @@ describe("Task Tests", () => {
       ]
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     makeRequestSpy = jest.spyOn(BaseProvider.prototype as any, 'makeRequest').mockResolvedValue({
       data: { choices: [{ message: { content: MOCK_RESPONSE } }] }
     });
@@ -361,7 +362,7 @@ describe("Task Tests", () => {
   describe("Task Error Handling", () => {
     test("should handle invalid task type", () => {
       expect(() => {
-        wrap((text: string) => text, { task: "invalidTask" as any });
+        wrap((text: string) => text, { task: "invalidTask" as never });
       }).toThrow();
     });
 

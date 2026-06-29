@@ -8,7 +8,7 @@ process.env.NODE_ENV = "test";
 export function initializeProvidersFromEnv() {
   reset(); // Reset any existing providers
   
-  const providers: Array<{ provider: string; key: string }> = [];
+  const providers: Array<{ provider: 'openai' | 'claude' | 'gemini' | 'groq' | 'openrouter' | 'deepseek' | 'xai' | 'perplexity' | 'mistral'; key: string }> = [];
   
   // Check for each provider's API key in environment
   if (process.env.OPENAI_KEY) {
@@ -41,8 +41,8 @@ export function initializeProvidersFromEnv() {
   
   if (providers.length > 0) {
     initAIHooks({
-      providers: providers as any, // Type assertion for compatibility
-      defaultProvider: process.env.DEFAULT_PROVIDER as any
+      providers, // Type assertion for compatibility
+      defaultProvider: process.env.DEFAULT_PROVIDER as never
     });
     return true;
   }

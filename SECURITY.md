@@ -16,7 +16,7 @@ We actively support the latest major release and security patches for the previo
 If you discover a security vulnerability, **DO NOT** open a public GitHub issue.
 
 Instead, please report it privately by emailing:  
-**security@realteebot.dev**
+**security-npm-ai-hooks@iteebot.com**
 
 We take all security issues seriously and will respond within 48 hours.
 

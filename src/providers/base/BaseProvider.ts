@@ -3,12 +3,12 @@ import { AIHookError } from "../../errors";
 export interface FetchRequestConfig {
   url: string;
   method?: string;
-  data?: any;
+  data?: unknown;
   headers?: Record<string, string>;
 }
 
 export interface FetchResponse {
-  data: any;
+  data: unknown;
 }
 
 export interface ProviderConfig {
@@ -16,7 +16,7 @@ export interface ProviderConfig {
   baseUrl: string;
   envKey: string;
   headers: Record<string, string>;
-  requestBody: (prompt: string, model: string) => any;
+  requestBody: (prompt: string, model: string) => unknown;
   responseParser: (response: FetchResponse) => string;
   errorMessages: {
     missingKey: string;
@@ -94,14 +94,14 @@ export class BaseProvider {
     try {
       const response = await fetch(config.url, {
         method: config.method || "POST",
-        headers: config.headers as any,
+        headers: config.headers,
         body: config.data ? JSON.stringify(config.data) : undefined,
       });
 
       let data;
       try {
         data = await response.json();
-      } catch (e) {
+      } catch {
         data = await response.text();
       }
 
@@ -117,15 +117,16 @@ export class BaseProvider {
       }
 
       return { data };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as Error & { response?: { status: number; statusText: string; data: unknown } };
       // If it's already an HTTP error we just threw, rethrow it
-      if (error.response) {
-        throw error;
+      if (err.response) {
+        throw err;
       }
       
       // Otherwise, it's a network error (e.g. fetch failed entirely)
       // Emulate axios network error shape
-      throw Object.assign(new Error(error.message || "Network Error"), {
+      throw Object.assign(new Error(err.message || "Network Error"), {
         request: {}
       });
     }
@@ -144,10 +145,21 @@ export class BaseProvider {
     return output;
   }
 
-  protected handleError(error: any): AIHookError {
-    if (error.response) {
-      return this.handleHttpError(error);
-    } else if (error.request) {
+  protected handleError(error: unknown): AIHookError {
+    const err = error as Error & {
+      response?: {
+        status: number;
+        statusText?: string;
+        data?: {
+          error?: unknown;
+        };
+      };
+      request?: unknown;
+    };
+
+    if (err.response) {
+      return this.handleHttpError(err as Parameters<typeof this.handleHttpError>[0]);
+    } else if (err.request) {
       return new AIHookError(
         "NETWORK_ERROR",
         this.config.errorMessages.networkError,
@@ -157,7 +169,7 @@ export class BaseProvider {
     } else {
       return new AIHookError(
         "UNKNOWN_ERROR",
-        error.message || this.config.errorMessages.unknownError,
+        err.message || this.config.errorMessages.unknownError,
         this.config.name
       );
     }
@@ -180,7 +192,13 @@ export class BaseProvider {
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
-  protected handleHttpError(error: any): AIHookError {
+  protected handleHttpError(error: Error & {
+    response: {
+      status: number;
+      statusText?: string;
+      data?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+    };
+  }): AIHookError {
     const status = error.response.status;
     const text = error.response.data?.error
       ? JSON.stringify(error.response.data.error)

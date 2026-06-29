@@ -18,7 +18,7 @@ async function testAllProviders() {
   console.log('🚀 Testing All AI Providers\n');
 
   // Initialize with all available providers
-  const providers: Array<{ provider: string; key: string; defaultModel: string }> = [];
+  const providers: Array<{ provider: 'openai' | 'claude' | 'gemini' | 'groq' | 'openrouter' | 'deepseek' | 'xai' | 'perplexity' | 'mistral'; key: string; defaultModel: string }> = [];
   
   // Check for API keys in various environment variable formats
   if (process.env.OPENAI_KEY || process.env.OPENAI_API_KEY || process.env.OPENAI_KEY) {
@@ -111,10 +111,9 @@ async function testAllProviders() {
   providers.forEach(p => console.log(`   - ${p.provider}`));
   console.log('');
 
-  // Initialize with all providers
   initAIHooks({
-    providers: providers as any, // Type assertion for compatibility
-    defaultProvider: 'groq' as any // Prefer Groq if available
+    providers, // Type assertion for compatibility
+    defaultProvider: 'groq' // Prefer Groq if available
   });
 
   console.log('Available providers:', getAvailableProviders());
@@ -154,7 +153,7 @@ async function testAllProviders() {
     try {
       const summarize = wrap((text: string) => text, { 
         task: "summarize", 
-        provider: providerName as any
+        provider: providerName
       });
       
       const result = await summarize(testText);
@@ -181,10 +180,9 @@ async function testAllProviders() {
   const { provider: selectedProvider } = getProvider();
   console.log(`Selected default provider: ${selectedProvider}`);
   
-  // Test specific provider selection
   if (providers.length > 1) {
     const secondProvider = providers[1].provider;
-    const { provider: specificProvider } = getProvider(secondProvider as any);
+    const { provider: specificProvider } = getProvider(secondProvider);
     console.log(`Selected specific provider (${secondProvider}): ${specificProvider}`);
   }
 
